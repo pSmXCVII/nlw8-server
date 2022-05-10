@@ -15,6 +15,18 @@ export class SubmitFeedbackUseCase {
   
   async execute(request: SubmitFeedbackUseCaseRequest) {
     const { type, comment, screenshot } = request;
+
+    if(!type) {
+      throw new Error('O tipo informado está inválido!');
+    }
+    if(!comment) {
+      throw new Error('O comentário informado está inválido!');
+    }
+
+    if(screenshot && !screenshot.startsWith('data:image/png;base64,')) {
+      throw new Error('Formato da screenshot está inválida!');
+    }
+
     await this.feedbacksRepository.create({
       type,
       comment,
